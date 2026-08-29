@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZED JULIAN</title>
+    <!-- FontAwesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0b0c10;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+            overflow-y: auto;
+            perspective: 1000px;
+        }
+
+        /* Dynamic Glow Behind Card */
+        .glow-bg {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.15) 50%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            filter: blur(50px);
+            z-index: 0;
+            animation: pulseGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.15);
+                opacity: 0.9;
+            }
+        }
+
+        /* Glassmorphism Card Container */
+        .card-container {
+            position: relative;
+            z-index: 1;
+            background: rgba(20, 22, 34, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 42px 28px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        /* Top Telegram Icon Button */
+        .top-telegram-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 38px;
+            height: 38px;
+            background: rgba(36, 161, 222, 0.15);
+            border: 1px solid rgba(36, 161, 222, 0.3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #24A1DE;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            transform: translateZ(35px);
+            z-index: 10;
+        }
+
+        .top-telegram-btn:hover {
+            background: #24A1DE;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(36, 161, 222, 0.5);
+            transform: translateZ(35px) scale(1.1);
+        }
+
+        /* Profile Image */
+        .profile-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 24px auto;
+            transform: translateZ(30px);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-wrapper:hover .profile-img {
+            transform: scale(1.05);
+        }
+
+        /* Typography */
+        .title {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.35;
+            margin-bottom: 12px;
+            color: #ffffff;
+            letter-spacing: -0.2px;
+            transform: translateZ(20px);
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #a0aec0;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-weight: 400;
+            transform: translateZ(15px);
+        }
+
+        .subtitle strong {
+            color: #e2e8f0;
+        }
+
+        /* Social Buttons */
+        .buttons-grid {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            transform: translateZ(25px);
+        }
+
+        .btn {
+            width: 60px;
+            height: 54px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-size: 22px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* Platform Specific Styles */
+        .btn-x {
+            background: #000000;
+            color: #ffffff;
+        }
+        .btn-vk {
+            background: #0077ff;
+            color: #ffffff;
+        }
+        .btn-facebook {
+            background: #1877f2;
+            color: #ffffff;
+        }
+        .btn-apple {
+            background: #ffffff;
+            color: #000000;
+            width: 72px;
+        }
+
+        /* Real Colored Google Icon */
+        .btn-google {
+            background: #ffffff;
+        }
+        .google-icon {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Copyright Footer */
+        .copyright {
+            margin-top: 35px;
+            font-size: 12px;
+            color: #718096;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            transform: translateZ(10px);
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Maintenance Mode */
+        .maintenance-screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background:
+                radial-gradient(circle at 50% 35%, rgba(36, 161, 222, 0.14), transparent 34%),
+                #07090d;
+            color: #ffffff;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        .maintenance-card {
+            width: min(440px, 100%);
+            text-align: center;
+            padding: 38px 24px 28px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 28px;
+            background: rgba(15, 19, 27, 0.82);
+            box-shadow: 0 30px 80px rgba(0,0,0,.55);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .maintenance-icon {
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 24px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(36,161,222,.12);
+            border: 1px solid rgba(36,161,222,.28);
+            color: #24A1DE;
+            font-size: 32px;
+        }
+
+        .maintenance-title {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .maintenance-text {
+            color: #a8b1bf;
+            font-size: 14px;
+            line-height: 1.75;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        .maintenance-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 22px;
+            padding: 9px 13px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.08);
+            color: #cbd5e1;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .maintenance-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #f59e0b;
+            box-shadow: 0 0 12px rgba(245,158,11,.55);
+        }
+
+        .telegram-maintenance-bar {
+            position: relative;
+            width: min(340px, 100%);
+            min-height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 28px auto 0;
+            border-radius: 16px;
+            padding: 13px 16px;
+            background: #229ED9;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .telegram-maintenance-bar i {
+            font-size: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .maintenance-card {
+                padding: 30px 18px 24px;
+            }
+            .maintenance-title {
+                font-size: 23px;
+            }
+        }
+
+        /* Responsive layout for phones and small screens */
+        @media (max-width: 600px) {
+            body {
+                align-items: flex-start;
+                min-height: 100svh;
+                padding: 18px 12px;
+            }
+            .card-container {
+                width: min(100%, 380px);
+                margin: auto;
+                padding: 34px 18px 24px;
+                border-radius: 22px;
+            }
+            .profile-wrapper {
+                width: 92px;
+                height: 92px;
+                margin-bottom: 20px;
+            }
+            .title { font-size: 19px; }
+            .subtitle { font-size: 12px; margin-bottom: 24px; }
+            .buttons-grid { gap: 9px; flex-wrap: wrap; }
+            .btn { width: 56px; height: 50px; border-radius: 14px; }
+            .btn-apple { width: 68px; }
+            .maintenance-screen { padding: 16px; }
+            .maintenance-card {
+                width: min(100%, 370px);
+                padding: 30px 18px 22px;
+                border-radius: 22px;
+            }
+            .maintenance-icon { width: 66px; height: 66px; margin-bottom: 20px; }
+            .maintenance-title { font-size: 22px; }
+            .maintenance-text { font-size: 13px; }
+            .telegram-maintenance-bar { width: 100%; max-width: 320px; }
+        }
+
+        @media (max-width: 350px) {
+            body { padding: 10px 8px; }
+            .card-container { padding-left: 14px; padding-right: 14px; }
+            .btn { width: 50px; height: 48px; }
+            .btn-apple { width: 62px; }
+            .title { font-size: 18px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="glow-bg"></div>
+
+    <div class="maintenance-screen" id="maintenanceScreen" aria-live="polite">
+        <div class="maintenance-card">
+            <div class="maintenance-icon">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+            </div>
+            <div class="maintenance-title">Temporarily Unavailable</div>
+            <p class="maintenance-text">
+                We are currently performing scheduled maintenance and system improvements.
+                Some features may be temporarily unavailable while we complete the work.
+            </p>
+            <div class="maintenance-status">
+                <span class="maintenance-status-dot"></span>
+                Maintenance in progress
+            </div>
+        </div>
+        <a href="https://t.me/julian_code" target="_blank" rel="noopener noreferrer" class="telegram-maintenance-bar">
+            <i class="fa-brands fa-telegram"></i>
+            <span>Join us on Telegram for updates</span>
+        </a>
+    </div>
+
+
+    <div class="card-container" id="tiltCard">
+
+        <!-- Top Telegram Link Icon -->
+        <a href="https://t.me/julian_code" target="_blank" class="top-telegram-btn" title="Contact on Telegram">
+            <i class="fa-paper-plane fa-solid"></i>
+        </a>
+
+        <!-- Profile Picture -->
+        <div class="profile-wrapper">
+            <img src="https://i.ibb.co/s9JxPNKy/image.png" alt="ZED JULIAN" class="profile-img" />
+        </div>
+
+        <!-- English Title & Instructions -->
+        <div class="title">Please log in to<br />continue</div>
+
+        <p class="subtitle">
+            Choose a connection platform below.<br />
+            After logging in, <strong>copy the long URL from the browser</strong> and send it to the bot.
+        </p>
+
+        <!-- Social Buttons Grid -->
+        <div class="buttons-grid">
+            <!-- Twitter / X -->
+            <a href="https://auth.garena.com/universal/oauth?platform=11&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.kiosgamer.gameid.garena.co.id/oauth/callback_redirect/"
+            target="_blank" class="btn btn-x" data-analytics="x"><i class="fa-brands fa-x-twitter"></i></a>
+
+            <!-- VK -->
+            <a href="https://auth.garena.com/universal/oauth?platform=5&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.kiosgamer.gameid.garena.co.id/oauth/callback_redirect/"
+            target="_blank" class="btn btn-vk" data-analytics="vk"><i class="fa-brands fa-vk"></i></a>
+
+            <!-- Google -->
+            <a href="https://auth.garena.com/universal/oauth?platform=8&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.kiosgamer.gameid.garena.co.id/oauth/callback_redirect/"
+            target="_blank" class="btn btn-google" data-analytics="google">
+            <svg class="google-icon" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+            </svg>
+        </a>
+
+        <!-- Facebook -->
+        <a href="https://auth.garena.com/universal/oauth?platform=3&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.kiosgamer.gameid.garena.co.id/oauth/callback_redirect/"
+        target="_blank" class="btn btn-facebook" data-analytics="facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    </div>
+
+    <div class="buttons-grid">
+        <!-- Apple -->
+        <a href="https://auth.garena.com/universal/oauth?platform=10&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.kiosgamer.gameid.garena.co.id/oauth/callback_redirect/"
+        target="_blank" class="btn btn-apple" data-analytics="apple"><i class="fa-brands fa-apple"></i></a>
+    </div>
+
+    <!-- Copyright -->
+    <div class="copyright">
+        ZED JULIAN System © 2026
+    </div>
+
+</div>
+
+<script>
+    const card = document.getElementById('tiltCard');
+    const maintenanceScreen = document.getElementById('maintenanceScreen');
+
+    // 3D Tilt Effect on Mouse Move
+    document.addEventListener('mousemove', (e) => {
+        if (!card) return;
+        const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+        const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+        card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    // Reset Tilt Position on Mouse Leave
+    document.addEventListener('mouseleave', () => {
+        if (!card) return;
+        card.style.transform = 'rotateY(0deg) rotateX(0deg)';
+    });
+
+    // Click Ripple Effect for Buttons
+    document.querySelectorAll('.btn, .top-telegram-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const circle = document.createElement('span');
+            const diameter = Math.max(this.clientWidth, this.clientHeight);
+            const radius = diameter / 2;
+
+            const rect = this.getBoundingClientRect();
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${e.clientX - rect.left - radius}px`;
+            circle.style.top = `${e.clientY - rect.top - radius}px`;
+            circle.classList.add('ripple');
+
+            const ripple = this.getElementsByClassName('ripple')[0];
+            if (ripple) ripple.remove();
+            this.appendChild(circle);
+        });
+    });
+
+    // Server-backed analytics + maintenance.
+    async function apiRequest(path, options = {}) {
+        try {
+            const response = await fetch(path, {
+                ...options,
+                headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }
+            });
+            return await response.json();
+        } catch (_) {
+            return null;
+        }
+    }
+
+    async function trackEvent(event) {
+        await apiRequest('/api/track', {
+            method: 'POST',
+            body: JSON.stringify({ event })
+        });
+    }
+
+    async function applyMaintenanceFromServer() {
+        const data = await apiRequest('/api/status', { cache: 'no-store' });
+        const enabled = Boolean(data && data.maintenance);
+        const glow = document.querySelector('.glow-bg');
+        document.body.classList.toggle('maintenance-active', enabled);
+        if (card) card.style.display = enabled ? 'none' : '';
+        if (glow) glow.style.display = enabled ? 'none' : '';
+        if (maintenanceScreen) maintenanceScreen.style.display = enabled ? 'flex' : 'none';
+    }
+
+    trackEvent('page_view');
+    document.querySelectorAll('[data-analytics]').forEach(button => {
+        button.addEventListener('click', () => trackEvent('click_' + button.dataset.analytics));
+    });
+
+    applyMaintenanceFromServer();
+    // Re-check so an admin maintenance change is reflected without a manual refresh.
+    setInterval(applyMaintenanceFromServer, 15000);
+
+    // Local admin shortcut retained only for emergency local preview/testing.
+    if (location.hash === '#admin') {
+        const panel = document.createElement('div');
+        panel.style.cssText = 'position:fixed;z-index:99999;right:16px;bottom:16px;background:#141622;color:#fff;border:1px solid #ffffff22;border-radius:16px;padding:16px;width:min(370px,calc(100vw - 32px));font:14px Arial;box-shadow:0 20px 50px #0008';
+        panel.innerHTML = '<b>Local Preview</b><br><br>This page is controlled from the Telegram admin panel in production.<br><br>Use /panel in Telegram.';
+        document.body.appendChild(panel);
+    }
+
+</script>
+</body>
+</html>
