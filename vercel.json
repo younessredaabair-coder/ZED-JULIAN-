@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/api/track", "destination": "/api" },
-    { "source": "/api/status", "destination": "/api" },
-    { "source": "/api/telegram", "destination": "/api" },
-    { "source": "/api/set-webhook", "destination": "/api" }
-  ]
-}
